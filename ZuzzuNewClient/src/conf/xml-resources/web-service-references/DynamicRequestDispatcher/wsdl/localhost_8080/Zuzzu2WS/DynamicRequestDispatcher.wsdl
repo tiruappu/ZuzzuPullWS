@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions name="DynamicRequestDispatcher" targetNamespace="http://zuzzudynamicproj/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://zuzzudynamicproj/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+<xs:schema elementFormDefault="unqualified" targetNamespace="http://zuzzudynamicproj/" version="1.0" xmlns:tns="http://zuzzudynamicproj/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="cultbayRequest" type="tns:cultbayRequest"/>
+<xs:element name="cultbayRequestResponse" type="tns:cultbayRequestResponse"/>
+<xs:element name="response" type="tns:response"/>
+<xs:element name="responseResponse" type="tns:responseResponse"/>
+<xs:complexType name="response">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="responseResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="cultbayRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="cultbayRequestResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="cultbayRequest">
+    <wsdl:part element="tns:cultbayRequest" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="responseResponse">
+    <wsdl:part element="tns:responseResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="response">
+    <wsdl:part element="tns:response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="cultbayRequestResponse">
+    <wsdl:part element="tns:cultbayRequestResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="DynamicRequestDispatcher">
+    <wsdl:operation name="response">
+      <wsdl:input message="tns:response" name="response">
+    </wsdl:input>
+      <wsdl:output message="tns:responseResponse" name="responseResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cultbayRequest">
+      <wsdl:input message="tns:cultbayRequest" name="cultbayRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:cultbayRequestResponse" name="cultbayRequestResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="DynamicRequestDispatcherSoapBinding" type="tns:DynamicRequestDispatcher">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="response">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="response">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="responseResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cultbayRequest">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="cultbayRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="cultbayRequestResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="DynamicRequestDispatcher">
+    <wsdl:port binding="tns:DynamicRequestDispatcherSoapBinding" name="DynamicRequestDispatcherPort">
+      <soap:address location="http://localhost:8080/Zuzzu2WS/DynamicRequestDispatcher"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
