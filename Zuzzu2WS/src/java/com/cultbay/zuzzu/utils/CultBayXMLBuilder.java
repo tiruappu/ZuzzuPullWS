@@ -152,7 +152,7 @@ public class CultBayXMLBuilder {
                     + "		auktion.ebayueberschrift, auktion.ebayueberschrifthighlight, auktion.anzahlgebote,"
                     + "		auktion.ebaygaleriebild, auktion.ebaysofortkauf,"
                     + "		ebaydaten.galeriebild_id, vorlage.arrangement_id,ebaydaten.ebayname,auktion.AuctionMasterTypeID "
-                    + "		FROM ebay.auktion LEFT JOIN ebay.ebaydaten ON auktion.cusebeda_objekt_id = ebaydaten.cusebeda_objekt_id, ebay.vorlage"
+                    + "		FROM ebay.auktion LEFT JOIN ebay.ebaydaten ON auktion.cusebeda_objekt_id = ebaydaten.cusebeda_objekt_id, ebay.vorlage "
                     + "			WHERE auktion.vorlage_id = vorlage.id"
                     + "				AND auktion.cusebeda_objekt_id = 122 "
                     + "				AND auktion.cusebeda_objekt_id = vorlage.cusebeda_objekt_id"
@@ -305,9 +305,9 @@ public class CultBayXMLBuilder {
                     + "		auktion.ebayueberschrift, auktion.ebayueberschrifthighlight, auktion.anzahlgebote,"
                     + "		auktion.ebaygaleriebild, auktion.ebaysofortkauf, vorlage.arrangement_id,"
                     + "		ebaydaten.galeriebild_id, ebaydaten.ebayname, auktion.ebaysofortundneupreis, auktion.vorlage_id, auktion.AuctionMasterTypeID "
-                    + "		FROM ebay.auktion LEFT JOIN ebay.ebaydaten ON auktion.cusebeda_objekt_id = ebaydaten.cusebeda_objekt_id , ebay.vorlage"
+                    + "		FROM ebay.auktion LEFT JOIN ebay.ebaydaten ON auktion.cusebeda_objekt_id = ebaydaten.cusebeda_objekt_id , ebay.vorlage "
                     + "			WHERE 	"
-                    + "                                                                                 auktion.cusebeda_objekt_id = 122 AND "
+                    + "                                                                                 auktion.cusebeda_objekt_id != 122 AND "
                     + "				auktion.cusebeda_objekt_id IN "
                     + obj_arr
                     + "				AND auktion.status = 1 "
@@ -554,7 +554,7 @@ public class CultBayXMLBuilder {
                     + "		auktion.ebayueberschrift, auktion.ebayueberschrifthighlight, auktion.anzahlgebote,"
                     + "		auktion.ebaygaleriebild, auktion.ebaysofortkauf, auktion.vorlage_id,"
                     + "		ebaydaten.galeriebild_id, ebaydaten.ebayname, auktion.ebaysofortundneupreis, auktion.AuctionMasterTypeID "
-                    + "		FROM ebay.auktion LEFT JOIN ebay.ebaydaten ON auktion.cusebeda_objekt_id = ebaydaten.cusebeda_objekt_id, ebay.vorlage"
+                    + "		FROM ebay.auktion LEFT JOIN ebay.ebaydaten ON auktion.cusebeda_objekt_id = ebaydaten.cusebeda_objekt_id, ebay.vorlage "
                     + "			WHERE 	"
                     + "                                                                                     auktion.cusebeda_objekt_id = 122 AND "
                     + "				 auktion.vorlage_id IN "
@@ -810,7 +810,7 @@ public class CultBayXMLBuilder {
             SQL_Query = "SELECT 	auktion_sich.id, auktion_sich.cusebeda_objekt_id AS objectID, auktion_sich.ebayueberschrift, auktion_sich.anzahlgebote,"
                     + "		auktion_sich.endpreis as currentbid, auktion_sich.startpreis, auktion_sich.ebaysiteid, DATE_ADD(auktion_sich.startdatum, INTERVAL auktion_sich.dauer DAY) as endDate, "
                     + "		auktion_sich.ebaysofortkauf,if(auktion_sich.retailprice is NULL,0,auktion_sich.retailprice) as retailprice, auktion_sich.untertitel, auktion_sich.endpreis, auktion_sich.ebaysofortkauf, auktion_sich.status, auktion_sich.ebaysiteid, ebaydaten.galeriebild_id,ebaydaten.ebayname,auktion_sich.AuctionMasterTypeID, auktion_sich.quantity "
-                    + "		FROM ebay.auktion_sich LEFT JOIN ebay.ebaydaten ON auktion_sich.cusebeda_objekt_id = ebaydaten.cusebeda_objekt_id"
+                    + "		FROM ebay.auktion_sich LEFT JOIN ebay.ebaydaten ON auktion_sich.cusebeda_objekt_id = ebaydaten.cusebeda_objekt_id "
                     + "			WHERE auktion_sich.ebayitemid ='" + AuctionID + "'";
         }
         // Query
@@ -896,7 +896,12 @@ public class CultBayXMLBuilder {
                 } catch (Exception e) {
                     System.out.println("soldnumbers Exception : " + e.getMessage());
                 }
+                
+                if(objectData[0]!=null)
                 cultbayDetailsResponse.setHotelName(objectData[0]);
+                else
+                cultbayDetailsResponse.setHotelName("");
+                
                 cultbayDetailsResponse.setHotelPicture(image);
                 cultbayDetailsResponse.setAddress(adress);
                 
@@ -943,11 +948,11 @@ public class CultBayXMLBuilder {
 
                 CultbayAuctionDetailsRSImpl.EquipmentTypeImpl equipment = new CultbayAuctionDetailsRSTypeImpl.EquipmentTypeImpl();
 
-                String templateCategoriesQuery = "SELECT r.rubrik_id ";
-                templateCategoriesQuery += " FROM ebay.auktion a,ebay.vorlage v,ebay.vorlage_arrangement_rubrik r ";
-                templateCategoriesQuery += " WHERE a.ebayitemid =  " + AuctionID;
-                templateCategoriesQuery += " AND v.id = a.vorlage_id ";
-                templateCategoriesQuery += " AND r.vorlage_id = v.id ";
+                String templateCategoriesQuery = "SELECT r.rubrik_id";
+                templateCategoriesQuery += " FROM ebay.auktion a,ebay.vorlage v,ebay.vorlage_arrangement_rubrik r";
+                templateCategoriesQuery += " WHERE a.ebayitemid =" + AuctionID;
+                templateCategoriesQuery += " AND v.id = a.vorlage_id";
+                templateCategoriesQuery += " AND r.vorlage_id = v.id";
                 templateCategoriesQuery += " GROUP BY r.rubrik_id";
 
                 try {
@@ -965,10 +970,10 @@ public class CultBayXMLBuilder {
                      * Get Categories at Package level
                      */
                     int arrangement_id = 0;
-                    String arrangementIdQuery = "SELECT v.arrangement_id ";
-                    arrangementIdQuery += " FROM ebay.auktion a , ebay.vorlage v ";
+                    String arrangementIdQuery = "SELECT v.arrangement_id";
+                    arrangementIdQuery += " FROM ebay.auktion a , ebay.vorlage v";
                     arrangementIdQuery += " WHERE a.ebayitemid=" + AuctionID;
-                    arrangementIdQuery += " AND v.id = a.vorlage_id ";
+                    arrangementIdQuery += " AND v.id = a.vorlage_id";
                     arrangementIdQuery += " AND v.arrangement_id != 0 limit 1";
                     stmt = regorConnection.createStatement();
                     result = stmt.executeQuery(arrangementIdQuery);
@@ -1000,9 +1005,10 @@ public class CultBayXMLBuilder {
             System.out.println(sqlfehler.getMessage());
         }
         try {
+            System.out.println("This is response obj==>"+cultbayDetailsResponse);
             regorConnection.close();
             vegaConnection.close();
-            m.marshal(cultbayDetailsResponse, dw);
+            m.marshal(cultbayDetailsResponse, sw);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -1045,20 +1051,20 @@ public class CultBayXMLBuilder {
         this.getObjectGeoTagsMap(objectIDS);
         this.getHotelBrands(objectIDS);
 
-        String SQL_Query1 = "SELECT objekt.id, objekt.bezeichnung as hotelname, objekt.dateien_bilder_hauptbild_id, objekt.dateien_bilder_logo_id,"
-                + "	   objekt.strasse, objekt.ort, laender.bezeichnung as land, text.text as region,"
-                + "	   objekt.plz, objekt.fon, objekt.fax, objekt.url, objekt.email"
-                + "			FROM cusebeda.objekt, cusebeda.laender, cusebeda.verwaltungseinheiten, cumulida.finder, cumulida.text"
+        String SQL_Query1 = "SELECT objekt.id, objekt.bezeichnung as hotelname, objekt.dateien_bilder_hauptbild_id, objekt.dateien_bilder_logo_id, "
+                + "	   objekt.strasse, objekt.ort, laender.bezeichnung as land, text.text as region, "
+                + "	   objekt.plz, objekt.fon, objekt.fax, objekt.url, objekt.email "
+                + "			FROM cusebeda.objekt, cusebeda.laender, cusebeda.verwaltungseinheiten, cumulida.finder, cumulida.text "
                 + "			    WHERE objekt.id  IN "
                 + obj_arr
-                + "					AND  objekt.laender_id = laender.id"
-                + "					AND  laender.sprache_id ='"
+                + "					AND  objekt.laender_id = laender.id "
+                + "					AND  laender.sprache_id =' "
                 + this.language
                 + "' "
-                + "			  		AND  objekt.verwaltungseinheiten_id = verwaltungseinheiten.id"
-                + "		      		AND  verwaltungseinheiten.finder_id = finder.id"
-                + "			 		AND  finder.text_id = text.id"
-                + "			        AND  text.cusebeda_sprache_id ='"
+                + "			  		AND  objekt.verwaltungseinheiten_id = verwaltungseinheiten.id "
+                + "		      		AND  verwaltungseinheiten.finder_id = finder.id "
+                + "			 		AND  finder.text_id = text.id "
+                + "			        AND  text.cusebeda_sprache_id =' "
                 + this.language
                 + "'";
         System.out.println("GeoCodes query===================================================================" + SQL_Query1);
@@ -1119,19 +1125,19 @@ public class CultBayXMLBuilder {
                  */
                 CultbayGeoTagsResponseTypeImpl.GeoTagsTypeImpl.GeoTagTypeImpl.EquipmentTypeImpl equipment = new CultbayGeoTagsResponseTypeImpl.GeoTagsTypeImpl.GeoTagTypeImpl.EquipmentTypeImpl();
 
-                String SQL_Query2 = "SELECT text.text as category, rubrik.id as rubrik_id"
-                        + "		FROM hofesoda.arrangement, hofesoda.rubrik, hofesoda.arrangement_x_rubrik,"
+                String SQL_Query2 = "SELECT text.text as category, rubrik.id as rubrik_id "
+                        + "		FROM hofesoda.arrangement, hofesoda.rubrik, hofesoda.arrangement_x_rubrik, "
                         + "		 	 cumulida.finder, cumulida.text"
                         + "			WHERE arrangement.cusebeda_objekt_id  ='"
                         + object_id
                         + "'"
-                        + "				  AND arrangement.id = arrangement_x_rubrik.arrangement_id"
-                        + "				  AND arrangement_x_rubrik.rubrik_id = rubrik.id"
+                        + "				  AND arrangement.id = arrangement_x_rubrik.arrangement_id "
+                        + "				  AND arrangement_x_rubrik.rubrik_id = rubrik.id "
                         + "			      AND text.cusebeda_sprache_id ='"
                         + this.language
                         + "' "
-                        + "				  AND rubrik.finder_id = finder.id"
-                        + "				  AND finder.text_id = text.id"
+                        + "				  AND rubrik.finder_id = finder.id "
+                        + "				  AND finder.text_id = text.id "
                         + "		    GROUP by rubrik_id";
 
 
@@ -1148,18 +1154,18 @@ public class CultBayXMLBuilder {
                     System.out.println(sqlfehler.getMessage());
                 }
                 String SQL_Query3 = "SELECT text.text as facility, merkmal.id as merkmal_id"
-                        + "		FROM hofesoda.merkmal, hofesoda.daten,"
-                        + "		 	 cumulida.finder, cumulida.text"
-                        + "			WHERE daten.merkmal_id = merkmal.id"
+                        + "		FROM hofesoda.merkmal, hofesoda.daten, "
+                        + "		 	 cumulida.finder, cumulida.text "
+                        + "			WHERE daten.merkmal_id = merkmal.id "
                         + "				  AND daten.cusebeda_objekt_id  ='"
                         + object_id
                         + "'"
-                        + "				  AND merkmal.cultbay_kriterium = 1"
-                        + "				  AND merkmal.finder_id = finder.id"
+                        +  "				  AND merkmal.cultbay_kriterium = 1 "
+                        + "				  AND merkmal.finder_id = finder.id "
                         + "			      AND text.cusebeda_sprache_id ='"
                         + this.language
                         + "' "
-                        + "				  AND finder.text_id = text.id"
+                        + "				  AND finder.text_id = text.id "
                         + "			GROUP by merkmal_id";
 
                 try {
@@ -1379,11 +1385,11 @@ public class CultBayXMLBuilder {
         object_arr += ")";
 
         // Period Query
-        String SQL_Query = "SELECT cusebeda.hotelmarken_x_objekt.objekt_id, hotelmarken.bezeichnung as brand"
+        String SQL_Query = "SELECT cusebeda.hotelmarken_x_objekt.objekt_id, hotelmarken.bezeichnung as brand "
                 + "       FROM cusebeda.hotelmarken, cusebeda.hotelmarken_x_objekt "
-                + "			WHERE hotelmarken_x_objekt.objekt_id IN"
+                + "			WHERE hotelmarken_x_objekt.objekt_id IN "
                 + object_arr
-                + ""
+                + " ss"
                 + "				AND hotelmarken.id = hotelmarken_x_objekt.hotelmarken_id";
 
         // System.out.println (SQL_Query);
@@ -2185,7 +2191,7 @@ public class CultBayXMLBuilder {
     public boolean checkIfRunningAuction(String AuctionID) {
         boolean isRunning = false;
         String SQL_Query = " SELECT auktion.id" + "	FROM ebay.auktion"
-                + "		WHERE auktion.ebayitemid = '" + AuctionID + "'";
+                + "		WHERE auktion.ebayitemid like '" + AuctionID + "'";
 
         // Query
         dbConnection = new DBConnection();
@@ -2209,6 +2215,37 @@ public class CultBayXMLBuilder {
                 + " In ebay.auktion " + isRunning);
         return isRunning;
     }
+    
+    public boolean checkIfPastAuction(String auctionID){
+        
+         boolean isPastRunning = false;
+        String SQL_Query = " SELECT auktion_sich.id" + "	FROM ebay.auktion_sich"
+                + "		WHERE auktion_sich.ebayitemid like '" + auctionID + "'";
+
+        // Query
+        dbConnection = new DBConnection();
+        Connection regorConnection = dbConnection.getRegorConnection();
+        Statement stmt;
+        ResultSet result;
+        try {
+            stmt = regorConnection.createStatement();
+            result = stmt.executeQuery(SQL_Query);
+            while (result.next()) {
+                isPastRunning = true;
+            }
+            result.close();
+            stmt.close();
+            regorConnection.close();
+        } catch (SQLException sqlfehler) {
+            System.out.println("Error Occured during receving Data from the DB(checkIfRunningAuction)");
+            System.out.println(sqlfehler.getMessage());
+        }
+        System.out.println("checpastRunningAuction: " + auctionID
+                + " In ebay.auktion " + isPastRunning);
+        return isPastRunning;
+        
+    }
+    
 
     public String getAuctionURL(String siteID) {
         String URL = null;
@@ -2295,7 +2332,7 @@ public class CultBayXMLBuilder {
     public int getProductId(String ebayitemid){
     int productId=0;
     
-    String productIdQuery="select v.arrangement_id from ebay.auktion ak,ebay.vorlage v where ak.vorlage_id=v.id and v.arrangement_id !=0 ak.ebayitemid="+ebayitemid+" limit 1";
+    String productIdQuery="select v.arrangement_id from ebay.auktion ak,ebay.vorlage v where ak.vorlage_id=v.id and v.arrangement_id !=0 and ak.ebayitemid="+ebayitemid+" limit 1";
     dbConnection = new DBConnection();
     Connection zuzzuConnection = dbConnection.getVegaConnection();
     Statement stmt;

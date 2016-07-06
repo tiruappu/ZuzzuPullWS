@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.ws.BindingProvider;
 import javax.xml.ws.WebServiceRef;
 import zuzzudynamicproj.DynamicRequestDispatcher_Service;
 
@@ -98,6 +99,7 @@ public class ZuzzuServiceImpl extends HttpServlet {
         // If the calling of port operations may lead to race condition some synchronization is required.
         DynamicRequestDispatcher_Service service=new DynamicRequestDispatcher_Service();
         zuzzudynamicproj.DynamicRequestDispatcher port = service.getDynamicRequestDispatcherPort();
+        ((BindingProvider) port).getRequestContext().put("javax.xml.ws.client.receiveTimeout", "600000");
         return port.cultbayRequest(arg0);
     }
 
@@ -106,6 +108,7 @@ public class ZuzzuServiceImpl extends HttpServlet {
         // If the calling of port operations may lead to race condition some synchronization is required.
         DynamicRequestDispatcher_Service service1=new DynamicRequestDispatcher_Service();
         zuzzudynamicproj.DynamicRequestDispatcher port = service1.getDynamicRequestDispatcherPort();
+        ((BindingProvider) port).getRequestContext().put("javax.xml.ws.client.receiveTimeout", "600000");
         return port.response(arg0);
     }
     

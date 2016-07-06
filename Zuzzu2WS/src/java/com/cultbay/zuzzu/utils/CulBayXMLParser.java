@@ -65,6 +65,8 @@ public class CulBayXMLParser {
         private StringWriter sw = new StringWriter();
         private Marshaller m = null;
         private Unmarshaller un = null;
+        
+        private String zuzzuItemId=null;
 
         public CulBayXMLParser() {
                 DBConnection util = new DBConnection();
@@ -115,6 +117,8 @@ public class CulBayXMLParser {
                 this.periodEOASet = false;
                 this.sellerIDSet = false;
                 this.hotelNameSet = false;
+                
+                zuzzuItemId=null;
                 System.out.println("after initilization");
         }
 
@@ -329,6 +333,14 @@ public class CulBayXMLParser {
         public String getHotelName() {
                 return this.hotelName;
         }
+        
+        
+
+    public String getZuzzuItemId() {
+        return zuzzuItemId;
+    }
+        
+        
 
         /**
          * function for parsing the incoming XML-Request
@@ -556,6 +568,8 @@ public class CulBayXMLParser {
                 System.out.println("parse CultbayDetailsRequest Document");
                 auctionIDSet = true;
                 auctionID = cultbayDetailsRequest.getAuctionID();
+                if(!cultbayDetailsRequest.getZuzzuItemId().equals("") && !(cultbayDetailsRequest.getZuzzuItemId() != null) )
+                zuzzuItemId=cultbayDetailsRequest.getZuzzuItemId();
                 return true;
         }
         /**

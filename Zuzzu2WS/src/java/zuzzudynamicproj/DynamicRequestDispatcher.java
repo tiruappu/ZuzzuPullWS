@@ -73,7 +73,16 @@ public class DynamicRequestDispatcher {
                 if (xmlFileType == 1) {
                    // System.out.println("Output : "+output);                    
                 }
+                
+                if(!output.trim().equals(""))
                 resultString = output.trim();
+                else{
+                    resultString ="<?xml version='1.0' encoding='UTF-8'?>\n"
+                        + "<error>parser result:Invalid AuctionId </error>";
+                }
+                    
+                
+                    
             } else {
                 resultString = "<?xml version='1.0' encoding='UTF-8'?>\n"
                         + "<error>parser result: Unsuccessfull (" + result + ") Reason "

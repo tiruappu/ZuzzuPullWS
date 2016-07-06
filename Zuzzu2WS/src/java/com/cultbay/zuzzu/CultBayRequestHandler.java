@@ -255,7 +255,23 @@ public String handleCultbayRequest() {
         cultBayXMLBuilder = new CultBayXMLBuilder();
         System.out.println("in handleCultbayDetailsRequest");
         String auctionID = parseCulBayXML.getAuctionID();
-        if (auctionID != null) {
+          String zuzzuId=parseCulBayXML.getZuzzuItemId();
+        boolean zuzzuCheck=false;
+        if(zuzzuId!=null){
+        boolean zuzzuIdChecking=this.getZuzzuIdChecking();
+                zuzzuCheck=zuzzuIdChecking;
+        }else
+            zuzzuCheck=true;
+        
+        boolean auctionCheck=false;
+        
+        auctionCheck=cultBayXMLBuilder.checkIfRunningAuction(auctionID);
+        if(!auctionCheck){
+            auctionCheck=cultBayXMLBuilder.checkIfPastAuction(auctionID);
+        }
+        
+        
+        if (auctionID != null && !auctionID.equals("") && zuzzuCheck && auctionCheck) {
             // System.out.println("handleCultbayDetailsRequest...");
             output = cultBayXMLBuilder.buildXMLAuctionDetails(auctionID);
         }
@@ -935,4 +951,53 @@ public String handleCultbayRequest() {
         //System.out.println (" ISO String " +ISO_string);
         return ISO_string;
     }
+    
+    public boolean getZuzzuIdChecking(){
+        boolean zuzzuIdCheck=false;
+       
+        String zuzzuid=parseCulBayXML.getZuzzuItemId();
+        String ebayid=parseCulBayXML.getAuctionID();
+                 System.out.println("Zuzzu id "+zuzzuid);
+            if(!zuzzuid.equals("")){
+                
+                 Connection zuzzuConnection = dbConnection.getZuzzuConnection();
+        String SQL_Query = "select oxe.itemid from zuzzu.offer_x_ebayitemid oxe where oxe.ebayitemid="+ebayid+" and oxe.itemid='"+zuzzuid+"limit 1";
+
+        // Query 
+        Statement stmt;
+        ResultSet result;
+        try {
+            int count=0;
+            System.out.println("This is at zuzzuid checking");
+            stmt = zuzzuConnection.createStatement();
+            result = stmt.executeQuery(SQL_Query);
+            while (result.next()) {
+                count++;
+                System.out.println("This is zuzzu id "+result.getString("itemid")+"count"+count);
+              zuzzuIdCheck=true;
+            }
+            if(count>0){
+                zuzzuIdCheck=true;
+            }else
+                zuzzuIdCheck=false;
+            
+            result.close(); // close the resultSet
+            stmt.close();
+            zuzzuConnection.close();
+           
+        } catch (SQLException sqlfehler) {
+            System.out.println("====================Error Occured during receving Data from the DB checking zuzzuid ==========================");
+            System.out.println(sqlfehler.getMessage());
+            zuzzuIdCheck=false;
+        }
+            }else{
+                zuzzuIdCheck=true;
+            }
+            
+       
+        
+        return zuzzuIdCheck;
+    }
+    
+    
 }

@@ -40,7 +40,8 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
 
 <!--<?xml version="1.0" encoding="UTF-8"?>
 <Cultbay_AuctionDetailsRQ>
-<AuctionID>180986846221</AuctionID>
+<AuctionID>381273502965</AuctionID>
+<ZuzzuItemId>ZUZ9268749</ZuzzuItemId>
 </Cultbay_AuctionDetailsRQ>-->
 
 <!--<?xml version='1.0' encoding='UTF-8'?>
@@ -50,7 +51,8 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
 
 <!--<?xml version="1.0" encoding="UTF-8"?>
 <CurrentPriceBidCountRQ>
-<ItemId>180986846221</ItemId> 
+<ItemId>381273502965</ItemId>
+<ZuzzuItemId>ZUZ9268749</ZuzzuItemId> 
 </CurrentPriceBidCountRQ>-->
             </textarea><br>
             <input type="submit" value="Send Request"/>

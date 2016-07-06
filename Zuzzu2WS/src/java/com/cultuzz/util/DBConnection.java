@@ -25,7 +25,7 @@ public class DBConnection {
             try {
                 Class.forName("com.mysql.jdbc.Driver");
                 //vegeConnection = DriverManager.getConnection("jdbc:mysql://10.50.1.84/cusebeda", "CultbayWSRW", "cUlT8$yW5rW");
-                vegeConnection = DriverManager.getConnection("jdbc:mysql://192.168.9.172/cusebeda","root","123456");
+                vegeConnection = DriverManager.getConnection("jdbc:mysql://91.203.200.116:8080/cusebeda","accounting","accounting23!");
             } catch (Exception ex) {
                 ex.printStackTrace();
                 System.out.println("Vega connection exception");
@@ -39,7 +39,7 @@ public class DBConnection {
             try {
                 Class.forName("com.mysql.jdbc.Driver");
                 //regorConnection = DriverManager.getConnection("jdbc:mysql://10.50.1.95/ebay", "CultbayWSRW", "cUlT8$yW5rW");
-                regorConnection = DriverManager.getConnection("jdbc:mysql://192.168.9.172/ebay", "root", "123456");
+                regorConnection = DriverManager.getConnection("jdbc:mysql://91.203.200.116:8080/ebay","accounting","accounting23!");
             } catch (Exception ex) {
                 ex.printStackTrace();
                 System.out.println("Regor connection");
@@ -53,7 +53,7 @@ public class DBConnection {
             
             try{
                 Class.forName("com.mysql.jdbc.Driver");
-                zuzzuConnection = DriverManager.getConnection("jdbc:mysql://192.168.9.172/zuzzu","root","123456");
+                zuzzuConnection = DriverManager.getConnection("jdbc:mysql://91.203.200.116:8080/zuzzu","accounting","accounting23!");
             }catch(Exception ex){
                 ex.printStackTrace();
                 System.out.println("Zuzzu Connection");
